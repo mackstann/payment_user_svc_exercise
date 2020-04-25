@@ -10,14 +10,15 @@ import (
 )
 
 func main() {
+	addr := "127.0.0.1:8000"
+
 	store := store.NewStore()
 	svc := service.NewService(store)
-	r := routes.NewRouter(svc)
+	r := routes.NewRouter(svc, addr)
 
 	srv := &http.Server{
 		Handler: r,
-		Addr:    "127.0.0.1:8000",
+		Addr:    addr,
 	}
-
 	log.Fatal(srv.ListenAndServe())
 }
