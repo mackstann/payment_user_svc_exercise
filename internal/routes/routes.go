@@ -21,11 +21,13 @@ func handleUserPOST(svc service.Service, addr string) HttpHandlerFunc {
 		err := json.NewDecoder(r.Body).Decode(&user)
 		if err != nil {
 			handleInternalError(err, w, r)
+			return
 		}
 
 		id, err := svc.CreateUser(user)
 		if err != nil {
 			handleCreateUserError(err, w, r)
+			return
 		}
 
 		// fetch a new copy because the service may have applied default values, business logic, etc. to
@@ -33,11 +35,13 @@ func handleUserPOST(svc service.Service, addr string) HttpHandlerFunc {
 		user, err = svc.GetUser(id)
 		if err != nil {
 			handleGetUserError(err, w, r)
+			return
 		}
 
 		userJSON, err := json.Marshal(user)
 		if err != nil {
 			handleInternalError(err, w, r)
+			return
 		}
 
 		w.Header()["Location"] = []string{buildUserURI(addr, id)}
@@ -61,11 +65,13 @@ func handleUserGET(svc service.Service, addr string) HttpHandlerFunc {
 		user, err := svc.GetUser(id)
 		if err != nil {
 			handleGetUserError(err, w, r)
+			return
 		}
 
 		userJSON, err := json.Marshal(user)
 		if err != nil {
 			handleInternalError(err, w, r)
+			return
 		}
 
 		w.Write(userJSON)
