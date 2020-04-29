@@ -1,0 +1,21 @@
+# github.com/braintree-go/braintree-go v0.22.0
+## explicit
+github.com/braintree-go/braintree-go
+github.com/braintree-go/braintree-go/customfields
+github.com/braintree-go/braintree-go/date
+github.com/braintree-go/braintree-go/xmlnil
+# github.com/google/uuid v1.1.1
+## explicit
+github.com/google/uuid
+# github.com/gorilla/mux v1.7.4
+## explicit
+github.com/gorilla/mux
+# github.com/stripe/stripe-go/v71 v71.6.0
+## explicit
+github.com/stripe/stripe-go/v71
+github.com/stripe/stripe-go/v71/customer
+github.com/stripe/stripe-go/v71/form
+# golang.org/x/xerrors v0.0.0-20191204190536-9bdfabe68543
+## explicit
+golang.org/x/xerrors
+golang.org/x/xerrors/internal
