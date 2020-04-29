@@ -47,6 +47,12 @@ class IntegrationTest(unittest.TestCase):
             user = json.loads(body)
             self.assertUserMatches(user, TEST_USER)
 
+            # these are opaque IDs so we don't know what the correct value would be, but we can do some sanity checks.
+            self.assertNotEqual(user['braintree_customer_id'], '')
+            self.assertNotEqual(user['braintree_customer_id'], user['id'])
+            self.assertNotEqual(user['stripe_customer_id'], '')
+            self.assertNotEqual(user['stripe_customer_id'], user['id'])
+
     def _create_user_request(self):
         return urllib.request.Request(
             method='POST',

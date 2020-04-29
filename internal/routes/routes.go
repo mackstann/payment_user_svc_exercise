@@ -15,8 +15,6 @@ type HttpHandlerFunc func(w http.ResponseWriter, r *http.Request)
 
 func handleUserPOST(svc service.Service, addr string) HttpHandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// TODO: validation
-
 		var user models.User
 		err := json.NewDecoder(r.Body).Decode(&user)
 		if err != nil {
@@ -60,9 +58,7 @@ func handleUserGET(svc service.Service, addr string) HttpHandlerFunc {
 		vars := mux.Vars(r)
 		id := vars["id"]
 
-		// TODO: validation
-
-		user, err := svc.GetUser(id)
+		user, err := svc.GetUserWithGatewayAccounts(id)
 		if err != nil {
 			handleGetUserError(err, w, r)
 			return

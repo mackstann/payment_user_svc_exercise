@@ -1,6 +1,7 @@
 package braintree_gateway
 
 import (
+	"context"
 	"golang.org/x/xerrors"
 	"log"
 
@@ -13,19 +14,14 @@ type Gateway struct {
 	bt *braintree.Braintree
 }
 
-func NewGateway(accessToken string) (Gateway, error) {
-	bt, err := braintree.NewWithAccessToken(accessToken)
-	if err != nil {
-		return xerrors.Errorf("Couldn't initialize braintree with access token: %w", err)
-	}
-	return Gateway{
-		bt: bt,
-	}
+func NewGateway(env braintree.Environment, merchantID string, publicKey string, privateKey string) Gateway {
+	bt := braintree.New(env, merchantID, publicKey, privateKey)
+	return Gateway{bt: bt}
 }
 
 func (g Gateway) CreateUser(user models.User) (id string, err error) {
 	ctx := context.Background()
-	customer, err := bt.Customer().Create(ctx, &braintree.CustomerRequest{
+	customer, err := g.bt.Customer().Create(ctx, &braintree.CustomerRequest{
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
 	})
@@ -33,7 +29,7 @@ func (g Gateway) CreateUser(user models.User) (id string, err error) {
 		return "", xerrors.Errorf("Couldn't create braintree user: %w", err)
 	}
 
-	address, err := bt.Address().Create(ctx, customer.Id, &braintree.AddressRequest{
+	_, err = g.bt.Address().Create(ctx, customer.Id, &braintree.AddressRequest{
 		StreetAddress:     user.Address.Line1,
 		ExtendedAddress:   user.Address.Line2,
 		Locality:          user.Address.City,
@@ -46,6 +42,6 @@ func (g Gateway) CreateUser(user models.User) (id string, err error) {
 		return "", xerrors.Errorf("Couldn't create braintree address: %w", err)
 	}
 
+	log.Printf("Created Braintree user %s", customer.Id)
 	return customer.Id, nil
-
 }

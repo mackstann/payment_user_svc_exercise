@@ -17,3 +17,9 @@ type Address struct {
 	Subdivision string `json:"subdivision"`
 	PostalCode  string `json:"postal_code"`
 }
+
+type UserWithGatewayAccounts struct {
+	User
+	StripeCustomerID    *string `json:"stripe_customer_id"`
+	BraintreeCustomerID *string `json:"braintree_customer_id"`
+}
